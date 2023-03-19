@@ -1,0 +1,13 @@
+{% extends 'LMSUser/base.html' %}
+
+{% block content %}
+<div class="shadow-lg float-right" style="padding: 10px; margin: 60px; width: 500px;">
+    <h1>Registeration Form</h1>
+    <br/>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Register" class="btn btn-secondary">
+        </form> 
+</div>
+{% endblock content %}
