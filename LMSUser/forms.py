@@ -1,26 +1,35 @@
 from django import forms
 from django.forms import ModelForm
-from .models import User
+from .models import CustomUser
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
-class UserForm(ModelForm):
+
+class UserDetails(ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('middle_name', 'phone')
+        widgets = {
+            "middle_name": forms.TextInput(attrs={'class': 'form-control'}),
+            "phone": forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+
+class UserRegisterForm(UserCreationForm):
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Username'}))
+    first_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'first_name'}))
+    last_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'last_name'}))
+    password1 = forms.CharField(
+        widget=(forms.PasswordInput(attrs={'class': 'form-control'})))
+    password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'placeholder': 'Confirm password'}))
+    email = forms.EmailField(widget=forms.EmailInput(
+        attrs={'class': 'form-control', 'placeholder': 'Email'}))
+
     class Meta:
         model = User
-        fields = ('first_name','middle_name','last_name','email','phone','password1','password2')
-        labels = {
-            "first_name": "First Name",
-            "last_name": "Last Name",
-            "middle_name": "Middle Name",
-            "email": "Email",
-            "phone": "Phone",
-            "password1": "Password",
-            "password2": "Confirm Password",
-        }
-        widgets = {
-            "first_name": forms.TextInput(attrs = {"class":"form-control"}),
-            "middle_name": forms.TextInput(attrs = {"class":"form-control"}),
-            "last_name": forms.TextInput(attrs = {"class":"form-control"}),
-            "email": forms.EmailInput(attrs = {"class":"form-control"}),
-            "phone": forms.TextInput(attrs = {"class":"form-control"}),
-            "password1": forms.PasswordInput(attrs = {"class":"form-control"}),
-            "password2": forms.PasswordInput(attrs = {"class":"form-control"}),
-        }
+        fields = ('username', 'first_name', 'last_name',
+                  'email', 'password1', 'password2')
