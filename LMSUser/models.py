@@ -23,3 +23,6 @@ class CustomUser(models.Model):
     modified_date = models.DateField(default=timezone.now)
     version_number = models.IntegerField(default=0)
     is_email_verified = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return self.user.first_name + (' '+self.middle_name if self.middle_name else '') + ' ' + self.user.last_name

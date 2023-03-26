@@ -1,0 +1,24 @@
+{% extends 'LMSUser/base.html' %}
+{% block content %}
+<div class="shadow-lg float-right" style="padding: 10px; margin: 60px; width: 500px; height: 400px;">    
+    <h1> Login </h1>
+    <br />
+    <form action="" method=POST>
+    {% csrf_token %}	
+        <div class="form-group">
+            <label for="exampleInputEmail1">Username</label>
+            <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="Enter username">
+        </div>
+        
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" name="password" placeholder="Password">
+        </div>
+        <input type="submit" value="Submit" class="btn btn-secondary">
+    </form>
+    <br/>
+    <div>
+        Don't have an account? <a href="{% url 'register_user' %}"> Register Now </a>
+    </div>
+</div>
+{% endblock %}

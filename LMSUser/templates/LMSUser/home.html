@@ -1,8 +1,7 @@
-<html>
-    <body>
+{% extends 'LMSUser/base.html' %}
+{% block content %}
         <h1>Hello This is a Landing Page</h1>
         <div>
             <a href="{% url 'register_user' %}"> Register User </a>
         </div>
-    </body>
-</html>
+{% endblock content %}

@@ -11,9 +11,11 @@
     <title>Loan Management System</title>
   </head>
   <body>
-    {% block content %}
-
-    {% endblock content %}
+    <div class="container">
+      {% include "LMSUser/Navbar.html" %}
+      {% block content %}  
+      {% endblock content %}
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
