@@ -1,0 +1,15 @@
+{% extends 'LMSUser/base.html' %}
+{% block content %}
+<br/>
+<h1>Basic Details:</h1><br/>
+{% if messages %}
+{% for message in messages %}
+{{message}}
+{% endfor %}
+{% endif %}
+<form action="" method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Submit" class="btn btn-secondary">
+</form>
+{% endblock %}
