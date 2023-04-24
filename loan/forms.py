@@ -19,12 +19,13 @@ class LoanForm(ModelForm):
     class Meta:
         model = BasicDetails
         fields = ("first_name", "middle_name", "last_name", "email", "phone", "address1", "zipcode1", "address2",
-                  "zipcode2", "salary_type", "loan_type")
+                  "zipcode2", "salary_type", "loan_type", "amount")
         widgets = {
-            "address1": forms.Textarea(attrs={'class': 'form-control'}),
+            "address1": forms.Textarea(attrs={'class': 'form-control', 'style': 'height: 5em'}),
             "zipcode1": forms.TextInput(attrs={'class': 'form-control'}),
-            "address2": forms.Textarea(attrs={'class': 'form-control'}),
+            "address2": forms.Textarea(attrs={'class': 'form-control', 'style': 'height: 5em'}),
             "zipcode2": forms.TextInput(attrs={'class': 'form-control'}),
             "salary_type": forms.Select(attrs={'class': 'form-control'}),
             "loan_type": forms.Select(attrs={'class': 'form-control'}),
+            "amount": forms.NumberInput(attrs={'class': 'form-control'}),
         }

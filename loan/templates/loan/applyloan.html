@@ -1,15 +1,87 @@
 {% extends 'LMSUser/base.html' %}
 {% block content %}
-<br/>
-<h1>Basic Details:</h1><br/>
 {% if messages %}
 {% for message in messages %}
 {{message}}
 {% endfor %}
 {% endif %}
-<form action="" method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="Submit" class="btn btn-secondary">
-</form>
+<br/>
+<div class="w-50 p-3" style="overflow: scroll; float: right;">    
+<h3>Basic Details:</h3><br/>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <!--{{form.as_p}}-->
+        <div class="row">
+            <div class="col field">
+                {{ form.first_name.errors }}
+                <label for="id_first_name">First name: </label>
+                    {{ form.first_name }}
+            </div>
+            <div class="col field">
+                {{ form.middle_name.errors }}
+                <label for="id_middle_name">Middle name: </label>
+                    {{ form.middle_name }}
+            </div>
+            <div class="col field">
+                {{ form.last_name.errors }}
+                <label for="id_last_name">Last name: </label>
+                    {{ form.last_name }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col field">
+                {{ form.email.errors }}
+                <label for="id_email">Email: </label>
+                    {{ form.email }}
+            </div>
+            <div class="col field">
+                {{ form.phone.errors }}
+                <label for="id_phone">Phone: </label>
+                    {{ form.middle_name }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col field">
+                {{ form.loan_type.errors }}
+                <label for="id_loan_type">Loan Type: </label>
+                    {{ form.loan_type }}
+            </div>
+            <div class="col field">
+                {{ form.salary_type.errors }}
+                <label for="id_phone">Salary Type: </label>
+                    {{ form.salary_type }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col field">
+                {{ form.amount.errors }}
+                <label for="id_amount">Amount: </label>
+                    {{ form.amount }}
+            </div>
+        </div>
+            <div class="field">
+                {{ form.address1.errors }}
+                <label for="id_address1">Current Address: </label>
+                    {{ form.address1 }}
+            </div>
+            <div class="field">
+                {{ form.zipcode1.errors }}
+                <label for="id_zipcode1">Current Zip Code: </label>
+                    {{ form.zipcode1 }}
+            </div>
+            <div class="field">
+                {{ form.address2.errors }}
+                <label for="id_address2">Permanent Address: </label>
+                    {{ form.address2 }}
+        </div>
+        <div class="field">
+            {{ form.zipcode2.errors }}
+            <label for="id_zipcode2">Permanent Zip Code: </label>
+                {{ form.zipcode2 }}
+        </div>
+        <div class="mt-2 float-right">
+            <input type="submit" value="Next" class="btn btn-secondary">
+        </div>
+    </form>
+</div>
 {% endblock %}

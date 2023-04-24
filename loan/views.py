@@ -26,6 +26,8 @@ def applyLoan(request):
             if form.is_valid():
                 basicdetails = form.save(commit=False)
                 basicdetails.user = user
+                basicdetails.created_by = user.user.first_name+' '+user.user.last_name
+                basicdetails.modified_by = user.user.first_name+' '+user.user.last_name
                 basicdetails.save()
                 return redirect('home')
             else:
