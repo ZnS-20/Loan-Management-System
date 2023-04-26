@@ -39,18 +39,20 @@ class BasicDetails(models.Model):
     modified_at = models.DateTimeField(default=timezone.now)
     modified_by = models.CharField(max_length=256)
     amount = models.DecimalField(
-        null=False, blank=False, decimal_places=2, max_digits=7, default=0)
+        null=False, blank=False, decimal_places=2, max_digits=20, default=0)
     version_number = models.IntegerField(default=0)
 
 
 class documents(models.Model):
-    file = models.BinaryField(null=False)
+    file = models.FileField()
     file_format = models.CharField(
         max_length=6, help_text="Stores the type of document i.e, pdf, jpeg, jpg, etc.")
     document_name = models.CharField(
         max_length=60, help_text="Store the name of the file.")
     document_type = models.CharField(
         max_length=60, help_text="Store the type of document uploaded. ex: Address Proof, income proof")
+    loan_id = models.ForeignKey(
+        BasicDetails, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     created_by = models.CharField(max_length=256)
     modified_at = models.DateTimeField(default=timezone.now)

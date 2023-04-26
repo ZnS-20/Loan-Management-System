@@ -1,9 +1,37 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from LMSUser.models import CustomUser
+from .models import documents, BasicDetails
+from .functions import getFormType, getListofDocuments, getFormObject
 
 # Create your views here.
 from .forms import LoanForm
+
+
+def uploadDocument(request, basicdetails_id):
+    if not request.user.is_authenticated:
+        return render(request, 'LMSUser/home.html', {})
+    basicDetails = BasicDetails.objects.get(pk=basicdetails_id)
+    formType = getFormType(basicDetails)
+    form = getFormObject(formType, request)
+    if request.method == "POST":
+        print(formType)
+        # each type of loan contains different types of documents.
+        docList = getListofDocuments(formType)
+        if form.is_valid():
+            for doc_type in docList:
+                uploadFile = request.FILES[doc_type]
+                extension = uploadFile.name.split('.', 1)[-1]
+                doc = documents(file=uploadFile, file_format=extension, document_name=uploadFile.name, document_type=doc_type,
+                                loan_id=basicDetails, created_by=request.user, modified_by=request.user)
+                doc.save()
+            return redirect('home')
+        else:
+            return render(request, 'loan/uploadDocument.html',
+                          {'form': form})
+    else:
+        return render(request, 'loan/uploadDocument.html',
+                      {'form': form})
 
 
 def applyLoan(request):
@@ -29,7 +57,7 @@ def applyLoan(request):
                 basicdetails.created_by = user.user.first_name+' '+user.user.last_name
                 basicdetails.modified_by = user.user.first_name+' '+user.user.last_name
                 basicdetails.save()
-                return redirect('home')
+                return redirect('uploadDocument', basicdetails_id=basicdetails.pk)
             else:
                 messages.error(request, "Invalid Fields! Try Again")
                 return render(request, 'loan/applyloan.html', {'form': form})

@@ -5,9 +5,8 @@
 {{message}}
 {% endfor %}
 {% endif %}
-<br/>
-<div class="w-50 p-3" style="overflow: scroll; float: right;">    
-<h3>Basic Details:</h3><br/>
+<div class="p-3 mt-2 shadow mb-5 bg-white rounded">    
+<h5>Basic Details:</h5>
     <form action="" method="POST">
         {% csrf_token %}
         <!--{{form.as_p}}-->
@@ -37,7 +36,7 @@
             <div class="col field">
                 {{ form.phone.errors }}
                 <label for="id_phone">Phone: </label>
-                    {{ form.middle_name }}
+                    {{ form.phone }}
             </div>
         </div>
         <div class="row">
@@ -51,8 +50,6 @@
                 <label for="id_phone">Salary Type: </label>
                     {{ form.salary_type }}
             </div>
-        </div>
-        <div class="row">
             <div class="col field">
                 {{ form.amount.errors }}
                 <label for="id_amount">Amount: </label>
