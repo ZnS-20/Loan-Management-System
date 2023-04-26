@@ -3,9 +3,14 @@ from django.contrib import messages
 from LMSUser.models import CustomUser
 from .models import documents, BasicDetails
 from .functions import getFormType, getListofDocuments, getFormObject
-
-# Create your views here.
 from .forms import LoanForm
+
+
+def reviewApplication(request, basicdetails_id):
+    basicDetails = BasicDetails.objects.get(pk=basicdetails_id)
+    documentList = documents.objects.filter(loan_id=basicdetails_id)
+    print(basicDetails.amount)
+    return render(request, 'loan/reviewApplication.html', {'basicDetails': basicDetails, 'documentList': documentList})
 
 
 def uploadDocument(request, basicdetails_id):
@@ -25,7 +30,7 @@ def uploadDocument(request, basicdetails_id):
                 doc = documents(file=uploadFile, file_format=extension, document_name=uploadFile.name, document_type=doc_type,
                                 loan_id=basicDetails, created_by=request.user, modified_by=request.user)
                 doc.save()
-            return redirect('home')
+            return redirect('reviewApplication', basicdetails_id=basicdetails_id)
         else:
             return render(request, 'loan/uploadDocument.html',
                           {'form': form})
@@ -60,6 +65,7 @@ def applyLoan(request):
                 return redirect('uploadDocument', basicdetails_id=basicdetails.pk)
             else:
                 messages.error(request, "Invalid Fields! Try Again")
+                form = LoanForm(initial=initial)
                 return render(request, 'loan/applyloan.html', {'form': form})
         else:
             return render(request, 'loan/applyloan.html', {'form': form})
