@@ -1,7 +1,7 @@
 from django.db import models
 from LMSUser.models import CustomUser
 from django.utils import timezone
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 
@@ -41,6 +41,11 @@ class BasicDetails(models.Model):
     modified_by = models.CharField(max_length=256)
     amount = models.DecimalField(
         null=False, blank=False, decimal_places=2, max_digits=20, default=0.0, validators=[MinValueValidator(0.01)])
+    tenure = models.IntegerField(
+        null=False, blank=False, default=12, help_text="Minimum Tenure should be 12 months and Maximum Tensure will be 360 months", validators=[
+            MaxValueValidator(100),
+            MinValueValidator(1)
+        ])
     version_number = models.IntegerField(default=0)
 
 

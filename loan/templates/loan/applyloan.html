@@ -60,6 +60,11 @@
         <label for="id_amount">Amount: </label>
         {{ form.amount }}
       </div>
+      <div class="col field">
+        {{ form.tenure.errors }}
+        <label for="id_tenure">Tenure: </label>
+        {{ form.tenure }}
+      </div>
     </div>
     <div class="field">
       {{ form.address1.errors }}
@@ -72,7 +77,7 @@
       {{ form.address2 }}
     </div>
     <div class="mt-2 float-right">
-      <input type="submit" value="Next" class="btn btn-secondary" />
+      <input type="submit" value="Save & Next" class="btn btn-secondary" />
     </div>
   </form>
 </div>
