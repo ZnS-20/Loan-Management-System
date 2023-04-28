@@ -10,8 +10,12 @@ class LoanTypes(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(default=timezone.now)
     version_number = models.IntegerField(default=0)
+    interest_rate = models.DecimalField(
+        decimal_places=2, max_digits=4, default=7.2, validators=[MinValueValidator(7.1), MaxValueValidator(15.0)])
+    down_payment = models.DecimalField(
+        default=0.0, max_digits=20, decimal_places=4, validators=[MinValueValidator(0)])
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.type
 
 
@@ -26,7 +30,7 @@ class SalaryTypes(models.Model):
 
 
 class BasicDetails(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     address1 = models.CharField(
         "Address1 will store the Current Address", max_length=512)
     address2 = models.CharField(
@@ -43,7 +47,7 @@ class BasicDetails(models.Model):
         null=False, blank=False, decimal_places=2, max_digits=20, default=0.0, validators=[MinValueValidator(0.01)])
     tenure = models.IntegerField(
         null=False, blank=False, default=12, help_text="Minimum Tenure should be 12 months and Maximum Tensure will be 360 months", validators=[
-            MaxValueValidator(100),
+            MaxValueValidator(360),
             MinValueValidator(1)
         ])
     version_number = models.IntegerField(default=0)

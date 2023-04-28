@@ -46,3 +46,9 @@ def getFormObject(formType, request):
             return HomeSalaried()
         elif formType == "HomeBussiness":
             return HomeBusiness()
+
+
+def calculateEMI(principal: float, interest_rate: float, tenure: int, down_payment: float):
+    r = (interest_rate/12)/100
+    emi = (principal*r*((1+r)**tenure))/((1+r)**tenure-1)
+    return emi

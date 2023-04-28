@@ -1,10 +1,13 @@
 {% extends 'LMSUser/base.html' %} 
 {% block content %}
+{% load humanize %}
 <div class="container p-3 mt-2 shadow mb-20 bg-white rounded px-4">
     <h3>User Information</h3>
     <div class="row">
         <div class="col  offset-1"><strong>First Name</strong>: {{basicDetails.user.user.first_name}}</div>
+        {% if basicDetails.user.middle_name is not None %}
         <div class="col  offset-1"><b>Middle Name</b>: {{basicDetails.user.middle_name}}</div>
+        {% endif %}
         <div class="col  offset-1"><strong>Last Name</strong>: {{basicDetails.user.user.last_name}}</div>
     </div>
     <div class="row mt-3">
@@ -12,15 +15,22 @@
         <div class="col  offset-1"><b>Email</b>: {{basicDetails.user.user.email}}</div>
     </div>
     <div class="row mt-3">
+        <div class="col  offset-1"><strong>Address</strong>: {{basicDetails.address1}}</div>
+    </div>
+
+    <h3 class="mt-3"> Loan Information </h3>
+    <div class="row mt-3">
         <div class="col  offset-1"><strong>Loan Type</strong>: {{basicDetails.loan_type.type}}</div>
         <div class="col  offset-1"><b>Salary Type</b>: {{basicDetails.salary_type.type}}</div>
     </div>
     <div class="row mt-3"> 
-        <div class="col  offset-1"><strong>Amount: {{basicDetails.amount}}</strong></div>
+        <div class="col  offset-1"><strong>Amount: {{basicDetails.amount|intcomma }}</strong></div>
         <div class="col  offset-1"><strong>Tenure: {{basicDetails.tenure}}</strong>&nbsp;months</div>
     </div>
-    <div class="row mt-3">
-        <div class="col  offset-1"><strong>Address</strong>: {{basicDetails.address1}}</div>
+    <div class="row mt-3 inline"> 
+        <div class="col  offset-1"><strong>EMI: {{emi|intcomma }}</strong></div>
+        <div class="col  offset"><strong>Total Amount Payable: {{totalAmountPayable|intcomma }}</strong></div>
+        <div class="col  offset-1"><strong>Interest Amount: {{interestAmount|intcomma }}</strong></div>
     </div>
 
     <h3 class="mt-3"> Uploaded Documents </h3>
@@ -35,7 +45,8 @@
         </div>
     </div>
     <div class="d-flex justify-content-around mt-3">
-        <a class = "btn btn-secondary" type="button" href="{% url 'home' %}">Edit</a>
+        <a class = "btn btn-secondary" type="button" href="{% url 'home' %}">Edit Details</a>
+        <a class = "btn btn-secondary" type="button" href="{% url 'home' %}">Edit Documents</a>
         <a class = "btn btn-secondary" type="button" href="{% url 'home' %}"> Submit </a>
     </div>
 </div>  

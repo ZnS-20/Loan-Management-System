@@ -2,15 +2,20 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from LMSUser.models import CustomUser
 from .models import documents, BasicDetails
-from .functions import getFormType, getListofDocuments, getFormObject
+from .functions import getFormType, getListofDocuments, getFormObject, calculateEMI
 from .forms import LoanForm
 
 
 def reviewApplication(request, basicdetails_id):
     basicDetails = BasicDetails.objects.get(pk=basicdetails_id)
     documentList = documents.objects.filter(loan_id=basicdetails_id)
-    print(basicDetails.amount)
-    return render(request, 'loan/reviewApplication.html', {'basicDetails': basicDetails, 'documentList': documentList})
+    emi = calculateEMI(basicDetails.amount, basicDetails.loan_type.interest_rate,
+                       basicDetails.tenure, basicDetails.loan_type.down_payment)
+    totalAmountPayable = emi*basicDetails.tenure
+    interestAmount = totalAmountPayable - basicDetails.amount
+    return render(request, 'loan/reviewApplication.html',
+                  {'basicDetails': basicDetails, 'documentList': documentList, 'emi': int(emi),
+                   'totalAmountPayable': int(totalAmountPayable), 'interestAmount': int(interestAmount)})
 
 
 def uploadDocument(request, basicdetails_id):
