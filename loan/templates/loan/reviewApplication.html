@@ -48,7 +48,7 @@
         </div>
     </div>
     <div class="d-flex justify-content-around mt-3">
-        <a class = "btn btn-secondary" type="button" href="{% url 'home' %}">Edit Details</a>
+        <a class = "btn btn-secondary" type="button" href="{% url 'applyLoan' basicDetails.id %}">Edit Details</a>
         <a class = "btn btn-secondary" type="button" href="{% url 'home' %}">Edit Documents</a>
         <a class = "btn btn-secondary" type="button" href="{% url 'submitApplication' basicDetails.id %}"> Submit </a>
     </div>

@@ -56,3 +56,28 @@ def calculateEMI(principal: float, interest_rate: float, tenure: int, down_payme
         p = principal
     emi = (p*r*((1+r)**tenure))/((1+r)**tenure-1)
     return emi
+
+
+def setInitialUserDetails(user):
+    initial = {
+        "first_name": user.user.first_name,
+        "middle_name": user.middle_name,
+        "last_name": user.user.last_name,
+        "email": user.user.email,
+        "phone": user.phone,
+        "user": user
+    }
+    return initial
+
+
+def setBasicDetails(basicDetail, user):
+    detail = {
+        "loan_type": basicDetail.loan_type,
+        "salary_type": basicDetail.salary_type,
+        "amount": basicDetail.amount,
+        "tenure": basicDetail.tenure,
+        "address1": basicDetail.address1,
+        "address2": basicDetail.address2
+    }
+    detail.update(user)
+    return detail
