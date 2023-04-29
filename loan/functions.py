@@ -50,5 +50,9 @@ def getFormObject(formType, request):
 
 def calculateEMI(principal: float, interest_rate: float, tenure: int, down_payment: float):
     r = (interest_rate/12)/100
-    emi = (principal*r*((1+r)**tenure))/((1+r)**tenure-1)
+    if (down_payment > 0):
+        p = principal - ((down_payment/100)*principal)
+    else:
+        p = principal
+    emi = (p*r*((1+r)**tenure))/((1+r)**tenure-1)
     return emi

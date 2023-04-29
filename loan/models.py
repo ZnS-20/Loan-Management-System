@@ -43,6 +43,7 @@ class BasicDetails(models.Model):
     created_by = models.CharField(max_length=256)
     modified_at = models.DateTimeField(default=timezone.now)
     modified_by = models.CharField(max_length=256)
+    submitted = models.BooleanField(null=True, blank=True)
     amount = models.DecimalField(
         null=False, blank=False, decimal_places=2, max_digits=20, default=0.0, validators=[MinValueValidator(0.01)])
     tenure = models.IntegerField(

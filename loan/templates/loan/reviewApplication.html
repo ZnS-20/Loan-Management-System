@@ -26,6 +26,9 @@
     <div class="row mt-3"> 
         <div class="col  offset-1"><strong>Amount: {{basicDetails.amount|intcomma }}</strong></div>
         <div class="col  offset-1"><strong>Tenure: {{basicDetails.tenure}}</strong>&nbsp;months</div>
+        {% if downpayment is not None %}
+        <div class="col  offset"><strong>Downpayment: {{downpayment}}</strong></div>
+        {% endif %}
     </div>
     <div class="row mt-3 inline"> 
         <div class="col  offset-1"><strong>EMI: {{emi|intcomma }}</strong></div>
@@ -47,7 +50,7 @@
     <div class="d-flex justify-content-around mt-3">
         <a class = "btn btn-secondary" type="button" href="{% url 'home' %}">Edit Details</a>
         <a class = "btn btn-secondary" type="button" href="{% url 'home' %}">Edit Documents</a>
-        <a class = "btn btn-secondary" type="button" href="{% url 'home' %}"> Submit </a>
+        <a class = "btn btn-secondary" type="button" href="{% url 'submitApplication' basicDetails.id %}"> Submit </a>
     </div>
 </div>  
 {% endblock %}

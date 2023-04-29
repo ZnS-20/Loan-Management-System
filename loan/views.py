@@ -6,6 +6,15 @@ from .functions import getFormType, getListofDocuments, getFormObject, calculate
 from .forms import LoanForm
 
 
+def submitApplication(request, basicdetails_id):
+    basicdetails = BasicDetails.objects.get(pk=basicdetails_id)
+    if not request.user.is_authenticated:
+        return redirect('applyLoan',)
+    basicdetails.submitted = True
+    basicdetails.save()
+    return redirect('home')
+
+
 def reviewApplication(request, basicdetails_id):
     basicDetails = BasicDetails.objects.get(pk=basicdetails_id)
     documentList = documents.objects.filter(loan_id=basicdetails_id)
@@ -13,9 +22,15 @@ def reviewApplication(request, basicdetails_id):
                        basicDetails.tenure, basicDetails.loan_type.down_payment)
     totalAmountPayable = emi*basicDetails.tenure
     interestAmount = totalAmountPayable - basicDetails.amount
+    if (basicDetails.loan_type.down_payment > 0):
+        downpayment = (basicDetails.loan_type.down_payment/100) * \
+            basicDetails.amount
+    else:
+        downpayment = None
     return render(request, 'loan/reviewApplication.html',
                   {'basicDetails': basicDetails, 'documentList': documentList, 'emi': int(emi),
-                   'totalAmountPayable': int(totalAmountPayable), 'interestAmount': int(interestAmount)})
+                   'totalAmountPayable': int(totalAmountPayable), 'interestAmount': int(interestAmount),
+                   'downpayment': int(downpayment)})
 
 
 def uploadDocument(request, basicdetails_id):
