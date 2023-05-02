@@ -77,44 +77,32 @@ def uploadDocument(request, basicdetails_id):
                       {'form': form})
 
 
-def applyLoan(request, basicdetails_id):
+def applyLoan(request):
+    """The Function is used to store the basic details of the user in db.
+    get:
+    Returns Form containing basic details field
+
+    post:
+    Insert data into db.
+    """
     if not request.user.is_authenticated:
         return render(request, 'LMSUser/home.html', {})
     current_user = request.user.id
     user = CustomUser.objects.get(user=current_user)
     if request.method == "POST":
-        if int(basicdetails_id) > 0:
-            instance = BasicDetails.objects.get(pk=basicdetails_id)
-            form = LoanForm(request.POST, instance=instance)
-        else:
-            form = LoanForm(request.POST)
+        form = LoanForm(request.POST)
         if form.is_valid():
-            if int(basicdetails_id) > 0:
-                basicdetails = form.save(commit=False)
-                basicdetails.user = user
-                basicdetails.created_by = user.user.first_name+' '+user.user.last_name
-                basicdetails.modified_by = user.user.first_name+' '+user.user.last_name
-                basicdetails.modified_at = datetime.datetime.now()
-                basicdetails.save()
-                return redirect('reviewApplication', basicdetails_id=basicdetails_id)
-            else:
-                basicdetails = form.save(commit=False)
-                basicdetails.user = user
-                basicdetails.created_by = user.user.first_name+' '+user.user.last_name
-                basicdetails.modified_by = user.user.first_name+' '+user.user.last_name
-                basicdetails.save()
-                return redirect('uploadDocument', basicdetails_id=basicdetails.pk)
+            basicdetails = form.save(commit=False)
+            basicdetails.user = user
+            basicdetails.created_by = user.user.first_name+' '+user.user.last_name
+            basicdetails.modified_by = user.user.first_name+' '+user.user.last_name
+            basicdetails.save()
+            return redirect('uploadDocument', basicdetails_id=basicdetails.pk)
         else:
             messages.error(request, "Invalid Fields! Try Again")
             form = LoanForm(initial=initial)
-            return render(request, 'loan/applyloan.html', {'form': form, 'basicdetails_id': int(basicdetails_id)})
+            return render(request, 'loan/applyloan.html', {'form': form})
     else:
         initial = setInitialUserDetails(user)
         form = LoanForm(request.POST or None, initial=initial)
-        if int(basicdetails_id) > 0:
-            basicdetail = BasicDetails.objects.get(pk=basicdetails_id)
-            initial = setBasicDetails(basicdetail, initial)
-            form = LoanForm(initial=initial)
-            return render(request, 'loan/applyloan.html', {'form': form, 'basicdetails_id': int(basicdetails_id)})
-        else:
-            return render(request, 'loan/applyloan.html', {'form': form, 'basicdetails_id': basicdetails_id})
+        return render(request, 'loan/applyloan.html', {'form': form})

@@ -12,7 +12,7 @@
 {% endif %}
 <div class="p-3 mt-2 shadow mb-20 bg-white rounded">
   <h5>Basic Details:</h5>
-  <form action="{% url 'applyLoan' basicdetails_id %}" method="POST">
+  <form action="{% url 'applyLoan'%}" method="POST">
     {% csrf_token %}
     <!--{{form.as_p}}-->
     <div class="row">
@@ -76,11 +76,7 @@
       <label for="id_address2">Permanent Address: </label>
       {{ form.address2 }}
     </div>
-    {% if basicdetails_id > 0 %}
-    <input type="submit" value="Save & Review" class="btn btn-secondary mt-3" />
-    {% else %}
     <input type="submit" value="Save & Next" class="btn btn-secondary mt-3" />
-    {% endif %}
   </form>
 </div>
 {% endblock %}
