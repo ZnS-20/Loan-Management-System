@@ -9,5 +9,6 @@ urlpatterns = [
          views.reviewApplication, name='reviewApplication'),
     path('submitApplication/<basicdetails_id>',
          views.submitApplication, name='submitApplication'),
-
+    path('editDetails/<basicdetails_id>',
+         views.editDetails, name='editDetails'),
 ]

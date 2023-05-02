@@ -7,13 +7,46 @@ from .forms import LoanForm
 import datetime
 
 
+def editDetails(request, basicdetails_id):
+    """Functions is used to update basic details for the perticular id(basicdetails_id)
+    get:
+    return the form with initial values stored in database.
+
+    post:
+    updates the database table BasicDetails with id = basicdetails_id
+    """
+    basicDetail = BasicDetails.objects.get(pk=basicdetails_id)
+    if not request.user.is_authenticated or basicDetail.user != request.user:
+        messages.error(request, "Denied! Unauthorized Access.")
+        return redirect('home')
+
+    user = CustomUser.objects.get(user=request.user.id)
+    if request.method == "POST":
+        form = LoanForm(request.POST, instance=basicDetail)
+        if form.is_valid():
+            basicdetails = form.save(commit=False)
+            basicdetails.user = user
+            basicdetails.created_by = user.user.first_name+' '+user.user.last_name
+            basicdetails.modified_by = user.user.first_name+' '+user.user.last_name
+            basicdetails.modified_at = datetime.datetime.now()
+            basicdetails.save()
+            return redirect('reviewApplication', basicdetails_id=basicdetails_id)
+    else:
+        userDict = setInitialUserDetails(user)
+        initial = setBasicDetails(basicDetail, userDict)
+        form = LoanForm(initial=initial)
+        return render(request, 'loan/editDetails.html', {'form': form})
+
+
 def submitApplication(request, basicdetails_id):
     """
     The function is used to update the submitted column in Basic Details Table to true.
     """
     basicDetail = BasicDetails.objects.get(pk=basicdetails_id)
     if not request.user.is_authenticated:
-        return redirect('applyLoan')
+        messages.error(request, "Denied! Unauthorized Access.")
+        return redirect('home')
+
     basicDetail.submitted = True
     basicDetail.save()
     return redirect('home')
@@ -24,18 +57,24 @@ def reviewApplication(request, basicdetails_id):
     The Function returns the list of uploaded documents, details of loan as saved by the user and the calulated EMIs.
     """
     basicDetail = BasicDetails.objects.get(pk=basicdetails_id)
-    if not request.user.is_authenticated and request.user == basicDetail.user.user:
-        return render(request, 'LMSUser/home.html', {})
+    if not request.user.is_authenticated or request.user == basicDetail.user.user:
+        messages.error(request, "Denied! Unauthorized Access.")
+        return redirect('home')
+
     documentList = documents.objects.filter(loan_id=basicdetails_id)
     emi = calculateEMI(basicDetail.amount, basicDetail.loan_type.interest_rate,
                        basicDetail.tenure, basicDetail.loan_type.down_payment)
+    interestAmount = basicDetail.amount - emi*basicDetail.tenure
     totalAmountPayable = emi*basicDetail.tenure
-    interestAmount = totalAmountPayable - basicDetail.amount
     if (basicDetail.loan_type.down_payment > 0):
         downpayment = (basicDetail.loan_type.down_payment/100) * \
             basicDetail.amount
+        totalAmountPayable += downpayment
+        interestAmount -= downpayment
     else:
         downpayment = None
+    interestAmount = interestAmount*- \
+        1 if (interestAmount < 0) else interestAmount
     return render(request, 'loan/reviewApplication.html',
                   {'basicDetails': basicDetail, 'documentList': documentList, 'emi': int(emi),
                    'totalAmountPayable': int(totalAmountPayable), 'interestAmount': int(interestAmount),
@@ -53,8 +92,10 @@ def uploadDocument(request, basicdetails_id):
     Upload documents and save in database. 
     """
     basicDetail = BasicDetails.objects.get(pk=basicdetails_id)
-    if not request.user.is_authenticated and request.user == basicDetail.user.user:
+    if (not request.user.is_authenticated) or request.user == basicDetail.user.user:
+        messages.error(request, "Denied! Unauthorized Access.")
         return render(request, 'LMSUser/home.html', {})
+
     formType = getFormType(basicDetail)
     form = getFormObject(formType, request)
     if request.method == "POST":
@@ -86,7 +127,9 @@ def applyLoan(request):
     Insert data into db.
     """
     if not request.user.is_authenticated:
+        messages.error(request, "Denied! Unauthorized Access.")
         return render(request, 'LMSUser/home.html', {})
+
     current_user = request.user.id
     user = CustomUser.objects.get(user=current_user)
     if request.method == "POST":
@@ -104,5 +147,5 @@ def applyLoan(request):
             return render(request, 'loan/applyloan.html', {'form': form})
     else:
         initial = setInitialUserDetails(user)
-        form = LoanForm(request.POST or None, initial=initial)
+        form = LoanForm(initial=initial)
         return render(request, 'loan/applyloan.html', {'form': form})

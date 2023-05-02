@@ -1,0 +1,82 @@
+{% extends 'LMSUser/base.html' %} 
+{% block content %}
+{% if messages %}
+{% for message in messages %} 
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>{{message}} 
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %} 
+{% endif %}
+<div class="p-3 mt-2 shadow mb-20 bg-white rounded">
+  <h5>Edit Basic Details:</h5>
+  <form action="" method="POST">
+    {% csrf_token %}
+    <!--{{form.as_p}}-->
+    <div class="row">
+      <div class="col field">
+        {{ form.first_name.errors }}
+        <label for="id_first_name">First name: </label>
+        {{ form.first_name }}
+      </div>
+      <div class="col field">
+        {{ form.middle_name.errors }}
+        <label for="id_middle_name">Middle name: </label>
+        {{ form.middle_name }}
+      </div>
+      <div class="col field">
+        {{ form.last_name.errors }}
+        <label for="id_last_name">Last name: </label>
+        {{ form.last_name }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col field">
+        {{ form.email.errors }}
+        <label for="id_email">Email: </label>
+        {{ form.email }}
+      </div>
+      <div class="col field">
+        {{ form.phone.errors }}
+        <label for="id_phone">Phone: </label>
+        {{ form.phone }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col field">
+        {{ form.loan_type.errors }}
+        <label for="id_loan_type">Loan Type: </label>
+        {{ form.loan_type }}
+      </div>
+      <div class="col field">
+        {{ form.salary_type.errors }}
+        <label for="id_phone">Salary Type: </label>
+        {{ form.salary_type }}
+      </div>
+      <div class="col field">
+        {{ form.amount.errors }}
+        <label for="id_amount">Amount: </label>
+        {{ form.amount }}
+      </div>
+      <div class="col field">
+        {{ form.tenure.errors }}
+        <label for="id_tenure">Tenure: </label>
+        {{ form.tenure }}
+      </div>
+    </div>
+    <div class="field">
+      {{ form.address1.errors }}
+      <label for="id_address1">Current Address: </label>
+      {{ form.address1 }}
+    </div>
+    <div class="field">
+      {{ form.address2.errors }}
+      <label for="id_address2">Permanent Address: </label>
+      {{ form.address2 }}
+    </div>
+    <input type="submit" value="Save & Next" class="btn btn-secondary mt-3" />
+  </form>
+</div>
+{% endblock %}
