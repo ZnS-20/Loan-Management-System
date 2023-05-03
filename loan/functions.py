@@ -1,4 +1,5 @@
 from .forms import PersonalSalariedForm, PersonalBusinessForm, HomeBusiness, HomeSalaried, EducationSalaried
+from .models import documents
 
 
 def getFormType(basicDetails):
@@ -18,7 +19,7 @@ def getListofDocuments(formType):
     elif formType == "HomeSalaried":
         return ['address_proof', 'identity_proof', 'passport_photo',
                 'salaryslip_m1', 'salaryslip_m2', 'salaryslip_m2', 'property_doc']
-    elif formType == "HomeBussiness":
+    elif formType == "HomeBusiness":
         return ['address_proof', 'identity_proof', 'passport_photo',
                 'itr_y1', 'itr_y2', 'itr_y3', 'property_doc']
 
@@ -33,7 +34,7 @@ def getFormObject(formType, request):
             return EducationSalaried(request.POST, request.FILES)
         elif formType == "HomeSalaried":
             return HomeSalaried(request.POST, request.FILES)
-        elif formType == "HomeBussiness":
+        elif formType == "HomeBusiness":
             return HomeBusiness(request.POST, request.FILES)
     else:
         if formType == "PersonalSalaried":
@@ -44,7 +45,7 @@ def getFormObject(formType, request):
             return EducationSalaried()
         elif formType == "HomeSalaried":
             return HomeSalaried()
-        elif formType == "HomeBussiness":
+        elif formType == "HomeBusiness":
             return HomeBusiness()
 
 
@@ -81,3 +82,8 @@ def setBasicDetails(basicDetail, user):
     }
     detail.update(user)
     return detail
+
+
+def deleteDocuments(basicDetail_id):
+    instance = documents.objects.filter(loan_id=basicDetail_id)
+    instance.delete()

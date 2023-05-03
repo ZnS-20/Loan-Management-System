@@ -32,55 +32,80 @@ class LoanForm(ModelForm):
         }
 
 
-class DocumentUploadForm(ModelForm):
-    class Meta:
-        model = documents
-        fields = ("file", "file_format", "document_name", "document_type",
-                  "created_at", "created_by", "modified_at", "modified_by", "version_number")
-
-
 class PersonalSalariedForm(forms.Form):
-    address_proof = forms.FileField()
-    identity_proof = forms.FileField()
-    passport_photo = forms.FileField()
-    salaryslip1 = forms.FileField()
-    salaryslip2 = forms.FileField()
-    salaryslip3 = forms.FileField()
+    address_proof = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    identity_proof = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    passport_photo = forms.ImageField(
+        widget=forms.FileInput(attrs={'class': 'form-control'}))
+    salaryslip1 = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    salaryslip2 = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    salaryslip3 = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
 
 
 class PersonalBusinessForm(forms.Form):
-    address_proof = forms.FileField()
-    identity_proof = forms.FileField()
-    passport_photo = forms.FileField()
-    itr_y1 = forms.FileField()
-    itr_y2 = forms.FileField()
-    itr_y3 = forms.FileField()
+    address_proof = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    identity_proof = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    passport_photo = forms.ImageField(
+        widget=forms.FileInput(attrs={'class': 'form-control'}))
+    itr_y1 = forms.FileField(widget=forms.FileInput(
+        attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    itr_y2 = forms.FileField(widget=forms.FileInput(
+        attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    itr_y3 = forms.FileField(widget=forms.FileInput(
+        attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
 
 
 class EducationSalaried(forms.Form):
-    address_proof = forms.FileField()
-    identity_proof = forms.FileField()
-    passport_photo = forms.FileField()
-    high_school_marksheet = forms.FileField()
-    recommendation_letter = forms.FileField()
-    proof_of_income = forms.FileField()
+    address_proof = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    identity_proof = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    passport_photo = forms.ImageField(
+        widget=forms.FileInput(attrs={'class': 'form-control'}))
+    high_school_marksheet = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    recommendation_letter = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    proof_of_income = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
 
 
 class HomeSalaried(forms.Form):
-    address_proof = forms.FileField()
-    identity_proof = forms.FileField()
-    passport_photo = forms.FileField()
-    salaryslip_m1 = forms.FileField()
-    salaryslip_m2 = forms.FileField()
-    salaryslip_m3 = forms.FileField()
-    property_doc = forms.FileField()
+    address_proof = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    identity_proof = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    passport_photo = forms.ImageField(
+        widget=forms.FileInput(attrs={'class': 'form-control'}))
+    salaryslip_m1 = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    salaryslip_m2 = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    salaryslip_m3 = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    property_doc = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
 
 
 class HomeBusiness(forms.Form):
-    address_proof = forms.FileField()
-    identity_proof = forms.FileField()
-    passport_photo = forms.FileField()
-    itr_y1 = forms.FileField()
-    itr_y2 = forms.FileField()
-    itr_y3 = forms.FileField()
-    property_doc = forms.FileField()
+    address_proof = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    identity_proof = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    passport_photo = forms.ImageField(
+        widget=forms.FileInput(attrs={'class': 'form-control'}))
+    itr_y1 = forms.FileField(widget=forms.FileInput(
+        attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    itr_y2 = forms.FileField(widget=forms.FileInput(
+        attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    itr_y3 = forms.FileField(widget=forms.FileInput(
+        attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))
+    property_doc = forms.FileField(
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/jpeg,image/gif,image/png,application/pdf'}))

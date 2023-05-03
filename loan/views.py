@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from LMSUser.models import CustomUser
 from .models import documents, BasicDetails
-from .functions import getFormType, getListofDocuments, getFormObject, calculateEMI, setInitialUserDetails, setBasicDetails
+from .functions import deleteDocuments, getFormType, getListofDocuments, getFormObject, calculateEMI, setInitialUserDetails, setBasicDetails
 from .forms import LoanForm
 import datetime
 
@@ -16,9 +16,15 @@ def editDetails(request, basicdetails_id):
     updates the database table BasicDetails with id = basicdetails_id
     """
     basicDetail = BasicDetails.objects.get(pk=basicdetails_id)
-    if not request.user.is_authenticated or basicDetail.user != request.user:
+    loan_type = basicDetail.loan_type
+    salary_type = basicDetail.salary_type
+    if (not request.user.is_authenticated) or basicDetail.user.user != request.user:
         messages.error(request, "Denied! Unauthorized Access.")
         return redirect('home')
+
+    if basicDetail.submitted:
+        messages.error(request, "Application Already Submitted!")
+        return render(request, 'LMSUser/home.html', {})
 
     user = CustomUser.objects.get(user=request.user.id)
     if request.method == "POST":
@@ -30,6 +36,11 @@ def editDetails(request, basicdetails_id):
             basicdetails.modified_by = user.user.first_name+' '+user.user.last_name
             basicdetails.modified_at = datetime.datetime.now()
             basicdetails.save()
+
+            if loan_type != form.cleaned_data['loan_type'] or salary_type != form.cleaned_data['salary_type']:
+                deleteDocuments(basicDetail)
+                return redirect('uploadDocument', basicdetails_id=basicdetails.pk)
+
             return redirect('reviewApplication', basicdetails_id=basicdetails_id)
     else:
         userDict = setInitialUserDetails(user)
@@ -43,9 +54,13 @@ def submitApplication(request, basicdetails_id):
     The function is used to update the submitted column in Basic Details Table to true.
     """
     basicDetail = BasicDetails.objects.get(pk=basicdetails_id)
-    if not request.user.is_authenticated:
+    if (not request.user.is_authenticated) or request.user != basicDetail.user.user:
         messages.error(request, "Denied! Unauthorized Access.")
-        return redirect('home')
+        return render(request, 'LMSUser/home.html', {})
+
+    if basicDetail.submitted:
+        messages.error(request, "Application Already Submitted!")
+        return render(request, 'LMSUser/home.html', {})
 
     basicDetail.submitted = True
     basicDetail.save()
@@ -57,9 +72,17 @@ def reviewApplication(request, basicdetails_id):
     The Function returns the list of uploaded documents, details of loan as saved by the user and the calulated EMIs.
     """
     basicDetail = BasicDetails.objects.get(pk=basicdetails_id)
-    if not request.user.is_authenticated or request.user == basicDetail.user.user:
+    if (not request.user.is_authenticated) or request.user != basicDetail.user.user:
         messages.error(request, "Denied! Unauthorized Access.")
-        return redirect('home')
+        return render(request, 'LMSUser/home.html', {})
+
+    if basicDetail.submitted:
+        messages.error(request, "Application Already Submitted!")
+        return render(request, 'LMSUser/home.html', {})
+
+    if documents.objects.filter(loan_id=basicDetail).count() < 6:
+        messages.error(request, "Please upload all the required documents")
+        return redirect('uploadDocument', basicdetails_id=basicdetails_id)
 
     documentList = documents.objects.filter(loan_id=basicdetails_id)
     emi = calculateEMI(basicDetail.amount, basicDetail.loan_type.interest_rate,
@@ -72,7 +95,7 @@ def reviewApplication(request, basicdetails_id):
         totalAmountPayable += downpayment
         interestAmount -= downpayment
     else:
-        downpayment = None
+        downpayment = 0
     interestAmount = interestAmount*- \
         1 if (interestAmount < 0) else interestAmount
     return render(request, 'loan/reviewApplication.html',
@@ -92,14 +115,17 @@ def uploadDocument(request, basicdetails_id):
     Upload documents and save in database. 
     """
     basicDetail = BasicDetails.objects.get(pk=basicdetails_id)
-    if (not request.user.is_authenticated) or request.user == basicDetail.user.user:
+    if (not request.user.is_authenticated) or request.user != basicDetail.user.user:
         messages.error(request, "Denied! Unauthorized Access.")
+        return render(request, 'LMSUser/home.html', {})
+
+    if basicDetail.submitted:
+        messages.error(request, "Application Already Submitted!")
         return render(request, 'LMSUser/home.html', {})
 
     formType = getFormType(basicDetail)
     form = getFormObject(formType, request)
     if request.method == "POST":
-        print(formType)
         # each type of loan contains different types of documents.
         docList = getListofDocuments(formType)
         if form.is_valid():
