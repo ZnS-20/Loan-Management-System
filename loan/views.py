@@ -7,6 +7,20 @@ from .forms import LoanForm
 import datetime
 
 
+def viewAllLoan(request):
+    """Functions returns a list of loans
+    get:
+    Return a page showing list of loans in a bootstrap table.
+    """
+    if not request.user.is_authenticated:
+        messages.error(request, 'Please login to view you loans.')
+        return redirect('home')
+    user = CustomUser.objects.get(user=request.user.id)
+    loans = BasicDetails.objects.filter(user=user)
+    print(type(loans))
+    return render(request, 'loan/viewApplications.html', {'loans': loans})
+
+
 def editDetails(request, basicdetails_id):
     """Functions is used to update basic details for the perticular id(basicdetails_id)
     get:
@@ -64,6 +78,7 @@ def submitApplication(request, basicdetails_id):
 
     basicDetail.submitted = True
     basicDetail.save()
+    messages.success(request, "Loan Submitted Successfully.")
     return redirect('home')
 
 

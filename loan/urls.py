@@ -11,4 +11,6 @@ urlpatterns = [
          views.submitApplication, name='submitApplication'),
     path('editDetails/<basicdetails_id>',
          views.editDetails, name='editDetails'),
+    path('viewAllLoan',
+         views.viewAllLoan, name='viewAllLoan'),
 ]
